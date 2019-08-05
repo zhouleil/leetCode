@@ -1,0 +1,7 @@
+const defaultEquals = function (a ,b) {
+    return a === b;
+}
+
+module.exports = {
+    defaultEquals
+}
