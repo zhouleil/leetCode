@@ -125,6 +125,10 @@ class LinkedList {
         }
         return objString;
     }
+    clear() {
+        this.head = undefined;
+        this.count = 0;
+    }
 }
 
 const list = new LinkedList();
@@ -132,5 +136,9 @@ list.push(15);
 list.push(10);
 list.push(11);
 console.log(list);
-const a = list.removeAt(2);
+const a = list.getElementAt(2);
 console.log(a);
+
+
+module.exports = LinkedList;
+
