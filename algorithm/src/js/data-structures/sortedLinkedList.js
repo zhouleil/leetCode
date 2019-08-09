@@ -2,7 +2,7 @@
  * 有序链表： 保持元素有序的链表结构。
  */
 
- const LinkedList = require('./linkedList');
+ const LinkedList = require('./LinkedList');
  const { defaultEquals }  = require('../util');
 
  const Compare = {

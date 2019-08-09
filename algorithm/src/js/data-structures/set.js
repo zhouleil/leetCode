@@ -91,5 +91,31 @@
          });
          return intersection;
      }
+
+     // 差集
+     difference(otherSet) {
+         const differenceSet = new Set();
+         this.values().forEach(value => {
+             if (!otherSet.has(value)) {
+                 differenceSet.add(value);
+             }
+         })
+         return differenceSet;
+     }
+     // 子集
+     isSubsetOf(otherSet) {
+         if (this.size() > otherSet.size()) {
+             return false;
+         }
+         let isSubset = true;
+         this.values().every(value => {
+             if (!otherSet.has(value)) {
+                 isSubset = false;
+                 return false;
+             }
+             return true;
+         })
+         return isSubset;
+     }
  }
 
