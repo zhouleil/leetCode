@@ -2,7 +2,7 @@
  * 利用双端队列检查字符串是否为回文。
  * 回文是正反都能读通的单词、词组、数或一系列字符的序列，例如 madam 或 racecar
  */
-const Deque = require('./double-ended-queue');
+const Deque = require('./Double-ended-queue');
 
 function palindromeChecker(aString) {
     if (
