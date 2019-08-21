@@ -19,7 +19,7 @@
          this.toStrFn = toStrFn;
          this.table = {}
      }
-     // 向散列表中增加一个新的项
+     // 向散列表中增加一个新的项,也能更新散列表
      set(key,value) {
         if (key != null && value != null) {
             const position = this.hashCode(key);
@@ -42,12 +42,28 @@
         const valuePair = this.table[this.hashCode[key]];
         return valuePair == null ? undefined : valuePair.value;
      }
+     isEmpty() {
+         return Object.keys(this.table).length === 0;
+     }
+     toString() {
+         if (this.isEmpty()) {
+             return '';
+         }
+         const keys = Object.keys(this.table);
+         let objString = `${keys[0]} => ${this.table[keys[0]].toString()}`;
+         for (let i  = 1;i < keys.length; i++) {
+             objString = `${objString},${keys[i]} => ${this.table[keys[i]].toString()}`;
+         }
+         return objString;
+     }
       // 散列函数
      loseloseHashCode(key) {
         if (typeof key === 'number') {
             return key;
         }
+        // 防止key是对象而不是一个字符串，先将key转化为一个字符串
         const tableKey = this.toStrFn(key);
+        // hash 每个字符串的 ASCII 值的总和
         let hash = 0;
         for (let i = 0; i < tableKey.length; i++) {
             hash += tableKey.charCodeAt(i);
@@ -74,4 +90,5 @@
  
  console.log(hash)
  console.log(hash.get('dada'))
+ console.log(hash.toString())
  
