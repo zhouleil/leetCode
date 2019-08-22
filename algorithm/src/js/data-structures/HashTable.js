@@ -80,11 +80,13 @@
  const hash = new HashTable();
 
  hash.set('Gandalf', 'gandlf@email.com');
- hash.set('Johe', 'johe@email.com');
+ hash.set('Johe', 'johe@email.com'); 
  hash.set('Tyrion', 'ryrion@email.com');
  hash.set('John', 'john@email.com');
  hash.set('Yonathan','jonathan@email.com');
  hash.set('Jamie','jamie@email.com');
+
+ // Johe 与 Yonathan key相同，都为 20 ，被 Yonathan 覆盖
 
 
  
