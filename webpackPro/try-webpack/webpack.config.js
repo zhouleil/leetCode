@@ -7,15 +7,35 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 // console.log(path.resolve(__dirname,'dist')); // 物理地址拼接
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const MinifyPlugin = require("babel-minify-webpack-plugin");
 
 const env = process.env.NODE_ENV;
 const devMode = env !== 'production';
+//引入glob
+var glob = require('glob')
+//entries函数
+var entries= function () {
+    var jsDir = path.resolve(__dirname, 'src')
+    var entryFiles = glob.sync(jsDir + '/*.{js,jsx}')
+    var map = {};
+
+    for (var i = 0; i < entryFiles.length; i++) {
+        var filePath = entryFiles[i];
+        var filename = filePath.substring(filePath.lastIndexOf('\/') + 1, filePath.lastIndexOf('.'));
+        map[filename] = filePath;
+    }
+    return map;
+}
 
 module.exports = {
-    entry: './src/index.js',
+    // entry: {
+    //     main: './src/index.js',
+    //     pageOne: './src/index1.js'
+    // },
+    entry: entries(),
     output: {
         path: path.resolve(__dirname , 'dist'),
-        filename: '[name]-[chunkhash:10].js'
+        filename: '[name]-[hash:10].js',
     },
     module: {
         rules: [
@@ -102,12 +122,33 @@ module.exports = {
             }
         }),        
         new MiniCssExtractPlugin('styles/css/[name]-[contenthash:10].css'),  // [name] 默认 也可以自定义name 声明使用
-        new webpack.ProvidePlugin({
-            _: 'lodash'
+        new webpack.ProvidePlugin({ // 引用框架 jquery lodash 工具库是很多组件会复用的，省去了import
+            '_': 'lodash'
+        }),       
+        // 压缩插件
+        // new MinifyPlugin(),
+        // new HtmlWebpackPlugin({
+        //     file: 'index.html',
+        //     template: 'public/index.html'
+        // }),
+        //负责打包html文件  将js注入到html中，minify压缩html
+        new HtmlWebpackPlugin({
+            filename: "index.html",
+            template: 'public/index.html',
+            minify:{
+              removeComment:true,
+              collapseWhitespace:true
+            },
+            chunks: ['index','runtime~index']
         }),
         new HtmlWebpackPlugin({
-            file: 'index.html',
-            template: 'public/index.html'
+            filename: "cart.html",
+            template: 'public/index.html',
+            minify:{
+                removeComment:true,
+                collapseWhitespace:true
+            },
+            chunks: ['index1','runtime~index1']
         }),
         // https://www.webpackjs.com/guides/caching/#%E8%BE%93%E5%87%BA%E6%96%87%E4%BB%B6%E7%9A%84%E6%96%87%E4%BB%B6%E5%90%8D-output-filenames-
         // HashedModuleIdsPlugin 保证提出的vendor hash不随项目文件改变
@@ -115,9 +156,7 @@ module.exports = {
         new CopyWebpackPlugin([ // src下其他的文件直接复制到 dist 目录下
             {from: 'public/favicon.ico', to: 'favicon.ico'}
         ]),
-        new webpack.ProvidePlugin({ // 引用框架 jquery lodash 工具库是很多组件会复用的，省去了import
-            '_': 'lodash'
-        })
+
     ],
     optimization: {    
         runtimeChunk: true,

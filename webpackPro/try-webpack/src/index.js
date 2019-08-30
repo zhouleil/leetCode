@@ -1,5 +1,4 @@
 import './assets/style/sass/global';
-import _ from 'lodash';
 
 let a = _.defaults({ 'a': 1 }, { 'a': 3, 'b': 2 });
 console.log(a);
@@ -47,3 +46,17 @@ const fn = async function(arr) {
 fn(arr)
 
 // console.log(delay(chunkArr,3000)(arr))
+
+console.log('_.difference',_.difference([3, 4, 2 ,5, 1], [4, 2]))
+console.log('_.drop([1, 2, 3])', _.drop([1, 2, 3,4]))
+
+var users = [
+    { 'user': 'barney',  'active': true },
+    { 'user': 'fred',    'active': false },
+    { 'user': 'pebbles', 'active': false }
+];
+console.log('_.dropRightWhile', _.dropRightWhile(users, function(o) { return !o.active; }))
+
+console.log('_.fromPairs', _.fromPairs([['fred', 30], ['barney', 40], ['herry', 50 ]]))
+
+console.log('_.sortedIndexOf', _.sortedIndexOf([4, 5, 5, 5, 6], 5))
