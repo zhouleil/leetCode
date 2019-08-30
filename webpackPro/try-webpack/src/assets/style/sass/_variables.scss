@@ -1,0 +1,21 @@
+@charset "utf-8";
+// images path
+// --------------------------------------------------
+$image-path: '~assets/images/';
+//common colors
+// -------------------------
+$col-main: #096784 !default;//主色调
+$col-bg: #f2f2f2 !default;//模块背景色
+$col-active: $col-main !default;//活动高亮颜色
+$col-disabled: #b2b2b2 !default;//禁止颜色
+$col-border: #D8D8D8 !default;//边框颜色
+$col-link:#4A90E2 !default;//超链接颜色
+// Scaffolding
+// -------------------------
+$body-bg: #f7f8fa !default;//背景色
+// -------------------------
+$font-family-sans-serif: "Helvetica Neue", Helvetica, Arial, "Microsoft YaHei", sans-serif !default;//字体
+$font-family-base: $font-family-sans-serif !default;
+$font-size-base: 14px !default;
+
+$--color-primary: rgb(55, 194, 255);
