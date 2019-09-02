@@ -182,6 +182,60 @@ const reduce = (arr, fn , initialValue ) => {
             accumlator = fn(accumlator, value);
     return [accumlator];    
 }
+
+const zip = (leftArr, rightArr, fn) => {
+    let index, results = [];
+    for (index = 0; index < Math.min(leftArr.length , rightArr.length); index++) 
+        results.push(fn(leftArr[index], rightArr[index]));
+    return results;
+}
+
+/**
+ * 柯里化是把一个多参数函数转换为一个嵌套的一元函数的过程。
+ */
+const add = (x, y) => x + y;
+const curry = function(binaryFn) {
+    return function (firstArg) {
+        return function (secondArg) {
+            return binaryFn(firstArg, secondArg);
+        };
+    };
+};
+let autoCurriedAdd = curry(add);
+autoCurriedAdd(2)(2);
+// => 4
+
+
+const curryN = (fn) => {
+    if (typeof fn !== 'function') {
+        throw Error('No function provided');
+    }
+    return function curriedFn(...args) {
+        if (args.length < fn.length) {
+            return function() {
+                return curriedFn.apply(null, args.concat(
+                    [].slice.call(arguments)
+                ))
+            };
+        }
+        return fn.apply(null, args);
+    }
+}
+
+const multiply = (x, y ,z) => x * y * z;
+curryN(multiply)(1)(2)(3);
+curryN(multiply)(1,2,0);
+
+const match = curryN(function(expr ,str) {
+    return str.match(expr);
+});
+let hasNumber = match(/[0-9]+/);
+let filtert = curryN(function(f ,arr) {
+    return arr.filter(f);
+})
+let findNumbersInArray = filtert(hasNumber);
+console.log(findNumbersInArray(['js', 'number1']));
+
 const arrayUtils = {
     map,
     forEach,
