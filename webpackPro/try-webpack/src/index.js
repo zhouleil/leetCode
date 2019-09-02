@@ -60,3 +60,12 @@ console.log('_.dropRightWhile', _.dropRightWhile(users, function(o) { return !o.
 console.log('_.fromPairs', _.fromPairs([['fred', 30], ['barney', 40], ['herry', 50 ]]))
 
 console.log('_.sortedIndexOf', _.sortedIndexOf([4, 5, 5, 5, 6], 5))
+
+var saves = ['profile', 'settings'];
+ 
+var done = _.after(saves.length, function() {
+  console.log('done saving!');
+});
+done()
+done()
+
