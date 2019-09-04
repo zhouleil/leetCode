@@ -7,7 +7,13 @@ import {
     tap,
     unary,
     once,
-    arrayUtils
+    arrayUtils,
+    curry,
+    curryN,
+    partial,
+    compose,
+    composeN,
+    pipe
 } from './es6-functional.js';
 
 const { forEach , every , some, map ,filter , concatAll , reduce} = arrayUtils;
@@ -247,3 +253,86 @@ let bookReviews = reduce(bookDetails, (acc, bookDetail) => {
 }, { good: 0, excellent: 0});
 
 console.log(bookReviews)
+
+
+console.log('curry==========')
+const add = (x, y) => x + y;
+let autoCurriedAdd = curry(add);
+autoCurriedAdd(2)(2);
+// => 4
+
+console.log('curryN==========')
+const multiply = (x, y ,z) => x * y * z;
+curryN(multiply)(1)(2)(3);
+curryN(multiply)(1,2,0);
+
+const match = curryN(function(expr ,str) {
+    return str.match(expr);
+});
+let hasNumber = match(/[0-9]+/);
+let filtert = curryN(function(f ,arr) {
+    return arr.filter(f);
+})
+let findNumbersInArray = filtert(hasNumber);
+console.log(findNumbersInArray(['js', 'number1']));
+
+
+console.log('partial==========');
+
+let delayTenMs = partial(setTimeout, undefined , 10);
+delayTenMs(() => console.log("Do Y task"));
+
+let obj = { foo : 'bar', bar: 'foo'};
+JSON.stringify(obj, null , 2);
+
+let prettyPrintJson = partial(JSON.stringify, undefined, null, 2);
+prettyPrintJson({ foo: 'bar', bar:'foo'});
+
+console.log('compose==========');
+let number = compose(Math.round , parseFloat);
+// number = (c) => Math.round(parseFloat(c));    
+console.log(number('3.56'));
+
+
+let filterOutStandingBooks = (book) => book.rating[0] === 5;
+let filterGoodBooks = (book) => book.rating[0] > 4.5;
+let filterBadBooks = (book) => book.rating[0] < 3.5;
+
+let projectTitleAndAuthor = (book) => { return { author: book.author, title: book.title} };
+let projectAuthor = (book) => ({ author: book.author });
+let projectTitle = (book) => ({ title : book.title });
+
+let queryGoodBooks = partial(filter, undefined, filterGoodBooks);
+let mapTitleAndAuthor = partial(map, undefined, projectTitleAndAuthor);
+let mapTitle = partial(map, undefined, projectTitle);
+
+let titleAndAuthorForGoodBooks = compose(mapTitleAndAuthor, queryGoodBooks);
+let titleForGoodBooks = compose(mapTitle, queryGoodBooks);
+
+let titleAndAuthorForBooksInfo = titleAndAuthorForGoodBooks(apressBooks);
+let titleForGoodBooksInfo = titleForGoodBooks(apressBooks);
+
+console.log(titleAndAuthorForBooksInfo)
+console.log(titleForGoodBooksInfo);
+
+console.log('composeN=======')
+
+let splitIntoSpaces = (str) => str.split(" ");
+let count = (array) => array.length;
+// 判断奇偶
+let oddOrEven = (ip) => ip % 2 === 0 ? 'even' : 'odd';
+
+const countWords = compose(count, splitIntoSpaces);
+console.log(countWords("Hello your reading about composition"));
+
+const oddOrEvenWords = composeN(oddOrEven, count, splitIntoSpaces);
+let oddOrEvenWords1 = composeN(composeN(oddOrEven,count), splitIntoSpaces);
+let oddOrEvenWords2 = composeN(oddOrEven,composeN(count,splitIntoSpaces));
+
+console.log('oddOrEvenWords composeN',oddOrEvenWords('hello your reading about composition'));
+console.log('oddOrEvenWords1 composeN',oddOrEvenWords1('hello your reading about composition'))
+console.log('oddOrEvenWords2 composeN',oddOrEvenWords2('hello your reading about composition'))
+
+const pipeOddOrEvenWords = pipe(splitIntoSpaces,count,oddOrEven);
+console.log(pipeOddOrEvenWords('hello your reading about composition'))
+

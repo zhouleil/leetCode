@@ -193,7 +193,6 @@ const zip = (leftArr, rightArr, fn) => {
 /**
  * 柯里化是把一个多参数函数转换为一个嵌套的一元函数的过程。
  */
-const add = (x, y) => x + y;
 const curry = function(binaryFn) {
     return function (firstArg) {
         return function (secondArg) {
@@ -201,11 +200,8 @@ const curry = function(binaryFn) {
         };
     };
 };
-let autoCurriedAdd = curry(add);
-autoCurriedAdd(2)(2);
-// => 4
 
-
+// 柯里化函数
 const curryN = (fn) => {
     if (typeof fn !== 'function') {
         throw Error('No function provided');
@@ -222,19 +218,41 @@ const curryN = (fn) => {
     }
 }
 
-const multiply = (x, y ,z) => x * y * z;
-curryN(multiply)(1)(2)(3);
-curryN(multiply)(1,2,0);
+// 偏应用 / 偏函数
+const partial = function (fn , ...partialArgs) {
+    let args = partialArgs;
+    return function (...fullArguments) {
+        let arg = 0;
+        for (let i = 0; i < args.length && arg < fullArguments.length; i++) {
+            if (args[i] === undefined) {
+                args[i] = fullArguments[arg++];
+            }
+        }
+        return fn.apply(null , args);
+    };
+};
 
-const match = curryN(function(expr ,str) {
-    return str.match(expr);
-});
-let hasNumber = match(/[0-9]+/);
-let filtert = curryN(function(f ,arr) {
-    return arr.filter(f);
-})
-let findNumbersInArray = filtert(hasNumber);
-console.log(findNumbersInArray(['js', 'number1']));
+// 组合， 函数数据流从右至左
+/**
+ * 
+ * @param {*} a 
+ * @param {*} b 
+ */
+const compose = (a , b) => 
+    (c) => a(b(c));
+
+/**
+ * 函数式组合总是满足结合律 composeN(f, composeN(g,h)) == composeN(composeN(f,g), h);
+ * @param  {...any} fns 
+ */
+const composeN = (...fns) =>
+(value) => 
+    reduce(fns.reverse(), (acc, fn) => fn(acc), value);
+
+// 管道， 函数数据流从左至右
+const pipe = (...fns) => 
+    (value) =>
+        reduce(fns,(acc, fn) => fn(acc), value);
 
 const arrayUtils = {
     map,
@@ -255,5 +273,11 @@ export {
     once,
     memoized,
     fastFactorial,
-    arrayUtils
+    arrayUtils,
+    curry,
+    curryN,
+    partial,
+    compose,
+    composeN,
+    pipe
 }
