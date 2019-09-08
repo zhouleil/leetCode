@@ -180,7 +180,7 @@ const reduce = (arr, fn , initialValue ) => {
     else     
         for (const value of arr) 
             accumlator = fn(accumlator, value);
-    return [accumlator];    
+    return accumlator;    
 }
 
 const zip = (leftArr, rightArr, fn) => {
@@ -218,7 +218,7 @@ const curryN = (fn) => {
     }
 }
 
-// 偏应用 / 偏函数
+// 偏应用 / 偏函数 部分应用函数参数
 const partial = function (fn , ...partialArgs) {
     let args = partialArgs;
     return function (...fullArguments) {
@@ -254,6 +254,65 @@ const pipe = (...fns) =>
     (value) =>
         reduce(fns,(acc, fn) => fn(acc), value);
 
+// 可作为compose参数打印
+const identity = (it) => {
+    console.log('identity',it);
+    return it;
+}        
+// 函子
+/**
+ * 
+ * @param {*} val 
+ */
+const MayBe = function (val) {
+    this.value = val;
+}
+MayBe.of = function(val) {
+    return new MayBe(val);
+}
+MayBe.prototype.isNothing = function () {
+    return (this.value === null || this.value === undefined);
+}
+MayBe.prototype.map = function (fn) {
+    return this.isNothing() ? MayBe.of(null) : MayBe.of(fn(this.value));
+}
+
+MayBe.prototype.join = function () {
+    return this.isNothing() ? MayBe.of(null) : this.value;
+}
+
+MayBe.prototype.chain = function () {
+    return this.map(f).join();
+}
+
+const Nothing = function(val) {
+    this.value = val;
+}
+
+Nothing.of = function (val) {
+    return new Nothing(val);
+}
+
+Nothing.prototype.map = function(f) {
+    return this;
+}
+
+const Some = function (val) {
+    this.value = val;
+}
+
+Some.of = function(val) {
+    return new Some(val);
+}
+
+Some.prototype.map = function(fn) {
+    return Some.of(fn(this.value));
+}
+
+const Either = {
+    Some,
+    Nothing
+}
 const arrayUtils = {
     map,
     forEach,
@@ -279,5 +338,8 @@ export {
     partial,
     compose,
     composeN,
-    pipe
+    pipe,
+    identity,
+    MayBe,
+    Either
 }

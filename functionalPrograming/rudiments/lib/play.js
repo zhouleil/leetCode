@@ -13,7 +13,10 @@ import {
     partial,
     compose,
     composeN,
-    pipe
+    pipe,
+    identity,
+    MayBe,
+    Either
 } from './es6-functional.js';
 
 const { forEach , every , some, map ,filter , concatAll , reduce} = arrayUtils;
@@ -325,9 +328,9 @@ let oddOrEven = (ip) => ip % 2 === 0 ? 'even' : 'odd';
 const countWords = compose(count, splitIntoSpaces);
 console.log(countWords("Hello your reading about composition"));
 
-const oddOrEvenWords = composeN(oddOrEven, count, splitIntoSpaces);
-let oddOrEvenWords1 = composeN(composeN(oddOrEven,count), splitIntoSpaces);
-let oddOrEvenWords2 = composeN(oddOrEven,composeN(count,splitIntoSpaces));
+const oddOrEvenWords = composeN(oddOrEven, count, identity ,splitIntoSpaces);
+let oddOrEvenWords1 = composeN(composeN(oddOrEven,count),identity, splitIntoSpaces);
+let oddOrEvenWords2 = composeN(oddOrEven,identity,composeN(count,splitIntoSpaces));
 
 console.log('oddOrEvenWords composeN',oddOrEvenWords('hello your reading about composition'));
 console.log('oddOrEvenWords1 composeN',oddOrEvenWords1('hello your reading about composition'))
@@ -335,4 +338,49 @@ console.log('oddOrEvenWords2 composeN',oddOrEvenWords2('hello your reading about
 
 const pipeOddOrEvenWords = pipe(splitIntoSpaces,count,oddOrEven);
 console.log(pipeOddOrEvenWords('hello your reading about composition'))
+
+console.log('MayBe==========')
+
+let responseTop = {
+    kind: 'Listing',
+    data: {
+        modhash: '',
+        children: [
+            {
+                kind: 't3',
+                data: {
+                    url: 'url',
+                    title: 'ES7 async'
+                }
+            }
+        ],
+        after: 't3_531nrd',
+        before: null
+    }
+}
+
+let responseTopNull = {
+    kind: 'Listing',
+    data: {
+        modhash: '',
+        after: 't3_531nrd',
+        before: null
+    }
+}
+
+const getTopTenSubRedditData = (res) => MayBe.of(res).map((arr) => arr['data'])
+.map((arr) =>arr['children'])
+.map((arr) => map(arr, (x) => {
+    return {
+        title: x['data'].title,
+        url: x['data'].url
+    }
+}))
+let mayBeData = getTopTenSubRedditData(responseTop);
+let mayBeDatanull = getTopTenSubRedditData(responseTopNull);
+
+console.log('mayBeData', mayBeData);    
+console.log('mayBeDatanull', mayBeDatanull);
+
+console.log('Either ==========');
 
