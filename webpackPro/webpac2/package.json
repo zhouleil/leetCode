@@ -1,0 +1,38 @@
+{
+  "name": "webpac2",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@babel/cli": "^7.1.0",
+    "@babel/core": "^7.1.0",
+    "@babel/preset-env": "^7.1.0",
+    "@babel/preset-react": "^7.0.0",
+    "autoprefixer": "^9.1.5",
+    "babel-preset-stage-0": "^6.24.1",
+    "css-loader": "^1.0.0",
+    "file-loader": "^2.0.0",
+    "mini-css-extract-plugin": "^0.4.3",
+    "optimize-css-assets-webpack-plugin": "^5.0.1",
+    "postcss-loader": "^3.0.0",
+    "sass-loader": "^7.1.0",
+    "style-loader": "^0.23.0",
+    "uglify-es": "^3.3.9",
+    "uglifyjs-webpack-plugin": "^2.0.1",
+    "url-loader": "^1.1.1",
+    "webpack": "^4.19.1",
+    "webpack-cli": "^3.1.0"
+  },
+  "dependencies": {
+    "babel-loader": "^8.0.2",
+    "lodash": "^4.17.11",
+    "react": "^16.5.2",
+    "react-dom": "^16.5.2"
+  }
+}
