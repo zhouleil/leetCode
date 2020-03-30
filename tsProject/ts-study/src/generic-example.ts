@@ -67,7 +67,7 @@ class Stack3<T extends Params> {
 
 // 泛型约束与泛型索引
 
-function getValue<T extends object, U extends keyof T> (obj: T, key: U) {
+function getValue<T extends object, U extends keyof T> (obj: T, key: U): T[U] {
   return obj[key]
 }
 
