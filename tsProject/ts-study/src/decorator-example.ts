@@ -9,7 +9,7 @@
 
 
  // 修饰方法
- function method (target: any, propertyKey: string, descriptor: PropertyDescriptor) {
+ function readonly (target: any, propertyKey: string, descriptor: PropertyDescriptor) {
    console.log(target)
    console.log('prop' + propertyKey)
    console.log('desc' + JSON.stringify(descriptor) + '\n\n')
@@ -25,12 +25,12 @@
      this.name = 'xiao'
    }
 
-   @method
+   @readonly
    say () {
      return 'instance method'
    }
 
-   @method
+   @readonly
    static run () {
      return 'static method'
    }
