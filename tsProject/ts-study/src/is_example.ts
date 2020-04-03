@@ -12,16 +12,7 @@ console.log(x! + x!)
    x = 10
  }
 
- type isType<T> = (val: any) => val is T
-
- const isNumber:isType<number> = function (val: any): val is number {
-   return typeof val === 'number'
- }
-
  // 2、is关键字
- function isString (test: any): test is string {
-   return typeof test === 'string'
- }
 
  function example (foo: number | string) {
    if (isString(foo)) {
@@ -85,3 +76,11 @@ interface Action {
     id: 10
   }
 }
+
+type isType<T> = (val: any) => val is T
+
+const isNumber: isType<number> = (val: any): val is number => {
+  return typeof val === 'number'
+}
+
+console.log(isNumber(555))
