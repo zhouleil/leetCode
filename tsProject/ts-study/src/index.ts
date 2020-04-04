@@ -1,5 +1,5 @@
 import './Reflect-Metadata-example'
-
+import './is_example'
 // function assign<T extends U, U> (target: T, source: U): T {
 //   for (let id in source) {
 //     target[id] = source[id]
