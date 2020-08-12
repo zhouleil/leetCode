@@ -11,22 +11,23 @@ module.exports = {
         path: path.resolve(__dirname, 'public')
     },
     module: {
-        rules: [{
-                test: /(\.jsx|\.js)$/,
-                use: {
-                    loader: 'babel-loader',
-                    options: {
-                        presets: [
-                            ["@babel/preset-env", {
-                                "targets": {
-                                    "browsers": ["ie >= 8", "chrome >= 62"]
-                                }
-                            }],
-                            "@babel/preset-react"
-                        ]
-                    }
-                },
-                exclude: /node_modules/
+        rules: [
+            {
+              test: /(\.jsx|\.js)$/,
+              use: {
+                  loader: 'babel-loader',
+                  options: {
+                      presets: [
+                          ["@babel/preset-env", {
+                              "targets": {
+                                  "browsers": ["ie >= 8", "chrome >= 62"]
+                              }
+                          }],
+                          "@babel/preset-react"
+                      ]
+                  }
+              },
+              exclude: /node_modules/
             }, 
             {
                 test: /\.(sa|sc|c)ss$/,
