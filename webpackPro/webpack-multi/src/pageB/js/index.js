@@ -8,4 +8,6 @@ const pageB = () => {
   console.log("pageB")
 }
 
+console.log(88)
+
 pageB()
