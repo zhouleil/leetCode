@@ -26,7 +26,8 @@ if (dirs && dirs.length > 0) {
         new HtmlWebpackPlugin({
           template: path.resolve(__dirname, 'src', dir, 'index.html'),
           chunks: [page],
-          filename: page + ".html"
+          filename: page + ".html",
+          minify: false
         })
       )
       copyOptions.patterns.push(
@@ -69,7 +70,30 @@ module.exports = (env, argv) => {
               loader: 'less-loader'
             }
           ]
-        }
+        },
+        {
+          test: /\.(png|jpe?g|gif)$/i,
+          loader: 'file-loader',
+          options: {
+            name: '[name].[ext]',
+            outputPath: (url, resourcePath, context) => {
+              const str = resourcePath.split('src')[1]
+              return str
+            }
+          },
+        },
+        // {
+        //   test: /\.(png|jpe?g|gif)$/,
+        //   use: [
+        //     {
+        //       loader: 'url-loader',
+        //       options: {
+        //         limit: 8192,
+        //         mimetype: 'image/png',            
+        //       }
+        //     }
+        //   ]
+        // },
       ]
     },
     optimization: argv.mode === 'production' ?
